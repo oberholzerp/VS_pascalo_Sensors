@@ -3,6 +3,7 @@ package ch.ethz.inf.vs.a1.pascalo.sensors.vs_pascalo_sensors;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.content.Intent;
 
 import com.jjoe64.graphview.*;
 import com.jjoe64.graphview.series.DataPoint;
@@ -16,8 +17,11 @@ public class SensorView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor__view);
 
-        TextView text = (TextView) findViewById(R.string.sensorName);
-        text.setText();
+        Intent myIntent = this.getIntent();
+        String temp = myIntent.getStringExtra("sensorId");
+
+        TextView text = (TextView) findViewById(R.id.sensor_name);
+        text.setText(temp);
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
@@ -27,6 +31,7 @@ public class SensorView extends AppCompatActivity {
                 new DataPoint(3, 2),
                 new DataPoint(4, 6)
         });
+
         graph.addSeries(series);
 
     }
