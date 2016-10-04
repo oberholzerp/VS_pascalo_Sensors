@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">VS_pascalo_Sensors</string>
+    <string name="list_of_sensors">Sensors</string>
+    <string name="sensorName">Sensor</string>
+</resources>
