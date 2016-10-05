@@ -22,7 +22,7 @@ import com.jjoe64.graphview.series.Series;
 
 
 
-public class SensorView extends AppCompatActivity implements SensorEventListener, GraphContainer {
+public class SensorView extends AppCompatActivity implements SensorEventListener/*, GraphContainer*/ {
 
     private LineGraphSeries<DataPoint> series [];
 
@@ -33,6 +33,8 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
 
     private long uptime;
 
+    private SensorTypesImpl STI;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,8 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
         series = new LineGraphSeries [3];
 
         uptime = 0;
+
+        STI = new SensorTypesImpl();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor__view);
@@ -74,9 +78,10 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
         series[0].setColor(Color.RED);
         series[1].setColor(Color.GREEN);
         series[2].setColor(Color.BLUE);
-        graph.addSeries(series[0]);
-        graph.addSeries(series[1]);
-        graph.addSeries(series[2]);
+
+        for (int i = 0; i < STI.getNumberValues(sensorType); i++) {
+            graph.addSeries(series[i]);
+        }
     }
 
     @Override
@@ -90,17 +95,20 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
         series[1].appendData(new DataPoint(x, eventCopy.values[1]), true, 1000);
         series[2].appendData(new DataPoint(x, eventCopy.values[2]), true, 1000);
 
-        //set x value to textfield
+
         TextView xAxisValue = (TextView) findViewById(R.id.xAxisValue);
-        xAxisValue.setText("x-Axis: " + Float.toString(eventCopy.values[0]));
+        xAxisValue.setText(Float.toString(eventCopy.values[0]) + " " + STI.getUnitString(sensorType));
 
-        //set y value to textfield
-        TextView yAxisValue = (TextView) findViewById(R.id.yAxisValue);
-        yAxisValue.setText("y-Axis: " + Float.toString(eventCopy.values[1]));
+        if (STI.getNumberValues(sensorType) > 1) {
+            //set y value to textfield
+            TextView yAxisValue = (TextView) findViewById(R.id.yAxisValue);
+            yAxisValue.setText(Float.toString(eventCopy.values[1]) + " " + STI.getUnitString(sensorType));
 
-        //set z value to textfield
-        TextView zAxisValue = (TextView) findViewById(R.id.zAxisValue);
-        zAxisValue.setText("z-Axis: " + Float.toString(eventCopy.values[2]));
+
+            //set z value to textfield
+            TextView zAxisValue = (TextView) findViewById(R.id.zAxisValue);
+            zAxisValue.setText(Float.toString(eventCopy.values[2]) + " " + STI.getUnitString(sensorType));
+        }
     }
 
     @Override

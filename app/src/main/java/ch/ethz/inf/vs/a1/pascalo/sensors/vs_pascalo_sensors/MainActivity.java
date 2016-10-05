@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //get all sensors
         SensorManager mgr = (SensorManager) getSystemService(SENSOR_SERVICE);
         List<Sensor> sensors = mgr.getSensorList(Sensor.TYPE_ALL);
-        mgr.
+
 
 
         ArrayAdapter<Sensor> array_adapter = new ArrayAdapter<Sensor>(this,
