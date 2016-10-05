@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //start SensorView activity
         Intent intent = new Intent(this, SensorView.class);
         intent.putExtra("sensorId", sensor.getName());
+        intent.putExtra("sensorType", sensor.getType());
         this.startActivity(intent);
 
     }
