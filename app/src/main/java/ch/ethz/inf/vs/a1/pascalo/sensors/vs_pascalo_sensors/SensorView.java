@@ -128,8 +128,10 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
 
     @Override
     public void addValues(double xIndex, float[] values) {
-        for (int i= 0; i<values.length; i++)
-        series[i].appendData(new DataPoint(xIndex, values[i]), true, 1000);
+        for (int i= 0; i<values.length; i++) {
+            if (i < 3)
+                series[i].appendData(new DataPoint(xIndex, values[i]), true, 1000);
+        }
     }
 
     @Override
