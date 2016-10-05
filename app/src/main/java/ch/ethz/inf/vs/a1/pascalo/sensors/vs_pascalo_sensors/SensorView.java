@@ -71,6 +71,7 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
 
 
 
+
         series[0].setColor(Color.RED);
         series[1].setColor(Color.GREEN);
         series[2].setColor(Color.BLUE);
