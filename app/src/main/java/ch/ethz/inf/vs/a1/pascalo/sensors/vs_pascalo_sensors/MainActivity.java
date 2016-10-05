@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
 
-        ArrayAdapter<Sensor> array_adapter = new ArrayAdapter<Sensor>(this,
+        SensorArrayAdapter<Sensor> array_adapter = new SensorArrayAdapter<Sensor>(this,
                 android.R.layout.simple_list_item_1,
                 sensors);
 
