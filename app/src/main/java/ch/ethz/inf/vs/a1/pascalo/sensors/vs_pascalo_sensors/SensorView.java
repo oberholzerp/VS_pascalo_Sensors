@@ -22,7 +22,7 @@ import com.jjoe64.graphview.series.Series;
 
 
 
-public class SensorView extends AppCompatActivity implements SensorEventListener/*, GraphContainer*/ {
+public class SensorView extends AppCompatActivity implements SensorEventListener, GraphContainer {
 
     private LineGraphSeries<DataPoint> series [];
 
@@ -90,11 +90,9 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
         if (uptime == 0) {
             uptime = eventCopy.timestamp;
         }
-        double x = (double) ((eventCopy.timestamp - uptime))/1000000000.0;
-        series[0].appendData(new DataPoint(x, eventCopy.values[0]), true, 1000);
-        series[1].appendData(new DataPoint(x, eventCopy.values[1]), true, 1000);
-        series[2].appendData(new DataPoint(x, eventCopy.values[2]), true, 1000);
 
+        double x = (double) ((eventCopy.timestamp - uptime))/1000000000.0;
+        this.addValues(x, eventCopy.values);
 
         TextView xAxisValue = (TextView) findViewById(R.id.xAxisValue);
         xAxisValue.setText(Float.toString(eventCopy.values[0]) + " " + STI.getUnitString(sensorType));
@@ -104,7 +102,6 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
             TextView yAxisValue = (TextView) findViewById(R.id.yAxisValue);
             yAxisValue.setText(Float.toString(eventCopy.values[1]) + " " + STI.getUnitString(sensorType));
 
-
             //set z value to textfield
             TextView zAxisValue = (TextView) findViewById(R.id.zAxisValue);
             zAxisValue.setText(Float.toString(eventCopy.values[2]) + " " + STI.getUnitString(sensorType));
@@ -113,7 +110,7 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
+        // do nothing
     }
 
     @Override
@@ -131,11 +128,13 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
 
     @Override
     public void addValues(double xIndex, float[] values) {
-
+        for (int i= 0; i<values.length; i++)
+        series[i].appendData(new DataPoint(xIndex, values[i]), true, 1000);
     }
 
     @Override
     public float[][] getValues() {
+        // TODO
         return new float[0][];
     }
 }
