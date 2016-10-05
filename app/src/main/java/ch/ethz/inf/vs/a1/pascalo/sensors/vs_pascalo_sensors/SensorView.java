@@ -129,4 +129,13 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
     }
 
 
+    @Override
+    public void addValues(double xIndex, float[] values) {
+
+    }
+
+    @Override
+    public float[][] getValues() {
+        return new float[0][];
+    }
 }

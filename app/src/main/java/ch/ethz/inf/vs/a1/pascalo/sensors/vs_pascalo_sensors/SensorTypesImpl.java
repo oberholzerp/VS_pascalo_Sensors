@@ -55,7 +55,7 @@ public class SensorTypesImpl implements SensorTypes {
             case Sensor.TYPE_ROTATION_VECTOR:
                 return "";
             default:
-                return "unkown";
+                return "";
         }
     }
 }
