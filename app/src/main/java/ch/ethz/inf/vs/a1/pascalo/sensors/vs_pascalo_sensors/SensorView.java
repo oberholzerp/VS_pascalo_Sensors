@@ -71,7 +71,6 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
 
 
 
-
         series[0].setColor(Color.RED);
         series[1].setColor(Color.GREEN);
         series[2].setColor(Color.BLUE);
@@ -82,25 +81,26 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        SensorEvent eventCopy = event;
         if (uptime == 0) {
-            uptime = event.timestamp;
+            uptime = eventCopy.timestamp;
         }
-        double x = (double) ((event.timestamp - uptime))/1000000000.0;
-        series[0].appendData(new DataPoint(x, event.values[0]), true, 1000);
-        series[1].appendData(new DataPoint(x, event.values[1]), true, 1000);
-        series[2].appendData(new DataPoint(x, event.values[2]), true, 1000);
+        double x = (double) ((eventCopy.timestamp - uptime))/1000000000.0;
+        series[0].appendData(new DataPoint(x, eventCopy.values[0]), true, 1000);
+        series[1].appendData(new DataPoint(x, eventCopy.values[1]), true, 1000);
+        series[2].appendData(new DataPoint(x, eventCopy.values[2]), true, 1000);
 
         //set x value to textfield
         TextView xAxisValue = (TextView) findViewById(R.id.xAxisValue);
-        xAxisValue.setText("x-Axis: " + Float.toString(event.values[0]));
+        xAxisValue.setText("x-Axis: " + Float.toString(eventCopy.values[0]));
 
         //set y value to textfield
         TextView yAxisValue = (TextView) findViewById(R.id.yAxisValue);
-        yAxisValue.setText("y-Axis: " + Float.toString(event.values[1]));
+        yAxisValue.setText("y-Axis: " + Float.toString(eventCopy.values[1]));
 
         //set z value to textfield
         TextView zAxisValue = (TextView) findViewById(R.id.zAxisValue);
-        zAxisValue.setText("z-Axis: " + Float.toString(event.values[2]));
+        zAxisValue.setText("z-Axis: " + Float.toString(eventCopy.values[2]));
     }
 
     @Override
