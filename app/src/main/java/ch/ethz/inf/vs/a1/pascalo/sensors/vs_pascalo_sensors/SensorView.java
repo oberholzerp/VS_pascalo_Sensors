@@ -78,9 +78,6 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
         graph.addSeries(series[0]);
         graph.addSeries(series[1]);
         graph.addSeries(series[2]);
-
-
-
     }
 
     @Override
