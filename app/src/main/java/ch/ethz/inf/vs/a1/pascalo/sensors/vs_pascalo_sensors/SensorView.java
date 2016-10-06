@@ -75,6 +75,7 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
         graph.getViewport().setMaxY(20.0);
         graph.getViewport().setMinY(-20.0);
 
+        graph.getGridLabelRenderer().setVerticalAxisTitle(STI.getUnitString(sensor.getType()));
 
 
         series[0].setColor(Color.RED);
