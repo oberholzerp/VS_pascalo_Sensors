@@ -16,7 +16,7 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 
-public class SensorView extends AppCompatActivity implements SensorEventListener, GraphContainer {
+public class SensorActivity extends AppCompatActivity implements SensorEventListener, GraphContainer {
 
     private LineGraphSeries<DataPoint> series [];
 

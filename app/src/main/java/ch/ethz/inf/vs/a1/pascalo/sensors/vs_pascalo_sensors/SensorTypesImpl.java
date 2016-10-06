@@ -33,7 +33,7 @@ public class SensorTypesImpl implements SensorTypes {
             case Sensor.TYPE_LIGHT:
                 return "lx";
             case Sensor.TYPE_PRESSURE:
-                return "mbar";
+                return "hPa";
             case Sensor.TYPE_PROXIMITY:
                 return "cm";
             case Sensor.TYPE_RELATIVE_HUMIDITY:

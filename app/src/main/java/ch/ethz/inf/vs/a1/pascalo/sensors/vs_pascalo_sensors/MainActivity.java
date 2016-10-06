@@ -2,23 +2,15 @@ package ch.ethz.inf.vs.a1.pascalo.sensors.vs_pascalo_sensors;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
-import android.content.Context;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.TextView;
+
 import java.util.List;
-import java.util.Iterator;
-import java.lang.Iterable;
+
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -55,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //toast notification with sensor name
         Toast.makeText(getApplicationContext(), sensor.getName(), Toast.LENGTH_SHORT).show();
 
-        //start SensorView activity
-        Intent intent = new Intent(this, SensorView.class);
+        //start SensorActivity activity
+        Intent intent = new Intent(this, SensorActivity.class);
         intent.putExtra("sensorId", sensor.getName());
         intent.putExtra("sensorType", sensor.getType());
         this.startActivity(intent);
