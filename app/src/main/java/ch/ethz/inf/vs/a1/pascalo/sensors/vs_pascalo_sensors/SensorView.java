@@ -6,25 +6,24 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.jjoe64.graphview.*;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.jjoe64.graphview.series.Series;
-
 
 
 public class SensorView extends AppCompatActivity implements SensorEventListener, GraphContainer {
 
     private LineGraphSeries<DataPoint> series [];
+
+    // Holds the last 100 y-values of each series in the graph
+    private float[][] data;
+    // Used to treat the array as ring
+    private int data_end_pointer;
 
     private SensorManager mSensorManager;
     private Sensor sensor;
@@ -39,11 +38,11 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        series = new LineGraphSeries [3];
+        STI = new SensorTypesImpl();
+
+        series = new LineGraphSeries [STI.getNumberValues(sensorType)];
 
         uptime = 0;
-
-        STI = new SensorTypesImpl();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor__view);
@@ -59,9 +58,12 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
         text.setText(sensorName);
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
-        series [0] = new LineGraphSeries<DataPoint>();
-        series [1] = new LineGraphSeries<DataPoint>();
-        series [2] = new LineGraphSeries<DataPoint>();
+        data = new float[STI.getNumberValues(sensorType)][];
+        for (int i = 0; i < STI.getNumberValues(sensorType); i++) {
+            series [i] = new LineGraphSeries<DataPoint>();
+            data[i] = new float[100];
+        }
+        data_end_pointer = 0;
 
         graph.getViewport().setScalable(true);
         graph.getViewport().setScrollable(true);
@@ -76,8 +78,12 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
 
 
         series[0].setColor(Color.RED);
-        series[1].setColor(Color.GREEN);
-        series[2].setColor(Color.BLUE);
+        if (STI.getNumberValues(sensorType) > 1) {
+            series[1].setColor(Color.GREEN);
+        }
+        if (STI.getNumberValues(sensorType) > 2) {
+            series[2].setColor(Color.BLUE);
+        }
 
         for (int i = 0; i < STI.getNumberValues(sensorType); i++) {
             graph.addSeries(series[i]);
@@ -128,15 +134,24 @@ public class SensorView extends AppCompatActivity implements SensorEventListener
 
     @Override
     public void addValues(double xIndex, float[] values) {
-        for (int i= 0; i<values.length; i++) {
-            if (i < 3)
-                series[i].appendData(new DataPoint(xIndex, values[i]), true, 1000);
+        for (int i= 0; i<STI.getNumberValues(sensorType); i++) {
+            series[i].appendData(new DataPoint(xIndex, values[i]), true, 1000);
+            data[i][data_end_pointer] = values[i];
+        }
+        if (++data_end_pointer >= 100) {
+            data_end_pointer = 0;
         }
     }
 
     @Override
     public float[][] getValues() {
-        // TODO
-        return new float[0][];
+        float[][] result = new float[STI.getNumberValues(sensorType)][];
+        for (int i = 0; i < STI.getNumberValues(sensorType); i++){
+            result[i] = new float[100];
+            for (int j = 0; j < 100; j++){
+                result[i][j] = data[i][(data_end_pointer + 1 + j) % 100];
+            }
+        }
+        return result;
     }
 }
