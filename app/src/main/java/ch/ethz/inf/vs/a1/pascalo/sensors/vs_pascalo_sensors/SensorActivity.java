@@ -93,25 +93,28 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        SensorEvent eventCopy = event;
+
+        // Copy values because the event is not owned by the application
+        float[] valuesCopy = event.values.clone();
+
         if (uptime == 0) {
-            uptime = eventCopy.timestamp;
+            uptime = event.timestamp;
         }
 
-        double x = (double) ((eventCopy.timestamp - uptime))/1000000000.0;
-        this.addValues(x, eventCopy.values);
+        double x = (double) ((event.timestamp - uptime))/1000000000.0;
+        this.addValues(x, valuesCopy);
 
         TextView xAxisValue = (TextView) findViewById(R.id.xAxisValue);
-        xAxisValue.setText(Float.toString(eventCopy.values[0]) + " " + STI.getUnitString(sensorType));
+        xAxisValue.setText(Float.toString(valuesCopy[0]) + " " + STI.getUnitString(sensorType));
 
         if (STI.getNumberValues(sensorType) > 1) {
             //set y value to textfield
             TextView yAxisValue = (TextView) findViewById(R.id.yAxisValue);
-            yAxisValue.setText(Float.toString(eventCopy.values[1]) + " " + STI.getUnitString(sensorType));
+            yAxisValue.setText(Float.toString(valuesCopy[1]) + " " + STI.getUnitString(sensorType));
 
             //set z value to textfield
             TextView zAxisValue = (TextView) findViewById(R.id.zAxisValue);
-            zAxisValue.setText(Float.toString(eventCopy.values[2]) + " " + STI.getUnitString(sensorType));
+            zAxisValue.setText(Float.toString(valuesCopy[2]) + " " + STI.getUnitString(sensorType));
         }
     }
 
