@@ -40,7 +40,7 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
 
         STI = new SensorTypesImpl();
 
-        series = new LineGraphSeries [STI.getNumberValues(sensorType)];
+        series = new LineGraphSeries[STI.getNumberValues(sensorType)];
 
         uptime = 0;
 
@@ -54,40 +54,43 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = mSensorManager.getDefaultSensor(sensorType);
 
-        TextView text = (TextView) findViewById(R.id.sensor_name);
-        text.setText(sensorName);
+        if (sensor != null) {
 
-        GraphView graph = (GraphView) findViewById(R.id.graph);
-        data = new float[STI.getNumberValues(sensorType)][];
-        for (int i = 0; i < STI.getNumberValues(sensorType); i++) {
-            series [i] = new LineGraphSeries<DataPoint>();
-            data[i] = new float[100];
-        }
-        data_end_pointer = 0;
+            TextView text = (TextView) findViewById(R.id.sensor_name);
+            text.setText(sensorName);
 
-        graph.getViewport().setScalable(true);
-        graph.getViewport().setScrollable(true);
+            GraphView graph = (GraphView) findViewById(R.id.graph);
+            data = new float[STI.getNumberValues(sensorType)][];
+            for (int i = 0; i < STI.getNumberValues(sensorType); i++) {
+                series[i] = new LineGraphSeries<DataPoint>();
+                data[i] = new float[100];
+            }
+            data_end_pointer = 0;
 
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setYAxisBoundsManual(false);
-        graph.getViewport().setMaxX(15.0);
-        graph.getViewport().setMinX(0.0);
-        graph.getViewport().setMaxY(20.0);
-        graph.getViewport().setMinY(-20.0);
+            graph.getViewport().setScalable(true);
+            graph.getViewport().setScrollable(true);
 
-        graph.getGridLabelRenderer().setVerticalAxisTitle(STI.getUnitString(sensor.getType()));
+            graph.getViewport().setXAxisBoundsManual(true);
+            graph.getViewport().setYAxisBoundsManual(false);
+            graph.getViewport().setMaxX(15.0);
+            graph.getViewport().setMinX(0.0);
+            graph.getViewport().setMaxY(20.0);
+            graph.getViewport().setMinY(-20.0);
+
+            graph.getGridLabelRenderer().setVerticalAxisTitle(STI.getUnitString(sensor.getType()));
 
 
-        series[0].setColor(Color.RED);
-        if (STI.getNumberValues(sensorType) > 1) {
-            series[1].setColor(Color.GREEN);
-        }
-        if (STI.getNumberValues(sensorType) > 2) {
-            series[2].setColor(Color.BLUE);
-        }
+            series[0].setColor(Color.RED);
+            if (STI.getNumberValues(sensorType) > 1) {
+                series[1].setColor(Color.GREEN);
+            }
+            if (STI.getNumberValues(sensorType) > 2) {
+                series[2].setColor(Color.BLUE);
+            }
 
-        for (int i = 0; i < STI.getNumberValues(sensorType); i++) {
-            graph.addSeries(series[i]);
+            for (int i = 0; i < STI.getNumberValues(sensorType); i++) {
+                graph.addSeries(series[i]);
+            }
         }
     }
 
@@ -157,5 +160,9 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
             }
         }
         return result;
+    }
+
+    public GraphContainer getGraphContainer() {
+        return this;
     }
 }
