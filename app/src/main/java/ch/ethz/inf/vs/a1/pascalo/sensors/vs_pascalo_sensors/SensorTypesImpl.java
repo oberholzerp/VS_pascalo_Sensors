@@ -49,11 +49,11 @@ public class SensorTypesImpl implements SensorTypes {
             case Sensor.TYPE_LINEAR_ACCELERATION:
                 return "m/s^2";
             case Sensor.TYPE_MAGNETIC_FIELD:
-                return "µT";
+                return "microT";
             case Sensor.TYPE_ORIENTATION:
                 return "°";
             case Sensor.TYPE_ROTATION_VECTOR:
-                return "";
+                return "no unit";
             default:
                 return "";
         }

@@ -24,6 +24,7 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
     private float[][] data;
     // Used to treat the array as ring
     private int data_end_pointer;
+    private int data_written;
 
     private SensorManager mSensorManager;
     private Sensor sensor;
@@ -35,8 +36,8 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
     private SensorTypesImpl STI;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public SensorActivity(){
+        super();
 
         STI = new SensorTypesImpl();
 
@@ -44,6 +45,17 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
 
         uptime = 0;
 
+        data = new float[STI.getNumberValues(sensorType)][];
+        for (int i = 0; i < STI.getNumberValues(sensorType); i++) {
+            series[i] = new LineGraphSeries<DataPoint>();
+            data[i] = new float[100];
+        }
+        data_end_pointer = 0;
+        data_written = 0;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor__view);
 
@@ -60,12 +72,6 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
             text.setText(sensorName);
 
             GraphView graph = (GraphView) findViewById(R.id.graph);
-            data = new float[STI.getNumberValues(sensorType)][];
-            for (int i = 0; i < STI.getNumberValues(sensorType); i++) {
-                series[i] = new LineGraphSeries<DataPoint>();
-                data[i] = new float[100];
-            }
-            data_end_pointer = 0;
 
             graph.getViewport().setScalable(true);
             graph.getViewport().setScrollable(true);
@@ -148,15 +154,18 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
         if (++data_end_pointer >= 100) {
             data_end_pointer = 0;
         }
+        data_written++;
     }
 
     @Override
     public float[][] getValues() {
-        float[][] result = new float[STI.getNumberValues(sensorType)][];
-        for (int i = 0; i < STI.getNumberValues(sensorType); i++){
-            result[i] = new float[100];
-            for (int j = 0; j < 100; j++){
-                result[i][j] = data[i][(data_end_pointer + 1 + j) % 100];
+        int dataValues = Math.min(100, data_written);
+        int dataStart = data_written <= 100 ? 0 : data_end_pointer;
+        float[][] result = new float[dataValues][];
+        for (int i = 0; i < dataValues; i++){
+            result[i] = new float[STI.getNumberValues(sensorType)];
+            for (int j = 0; j < STI.getNumberValues(sensorType); j++){
+                result[i][j] = data[j][(dataStart + i) % 100];
             }
         }
         return result;
